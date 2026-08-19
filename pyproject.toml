@@ -1,0 +1,53 @@
+[project]
+name = "ollie"
+version = "0.1.0"
+description = "A fully private, local multimodal home assistant"
+readme = "README.md"
+authors = [
+    { name = "Prashant Piprotar", email = "prashplus@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    # Web Framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "websockets>=14.0",
+    "python-multipart>=0.0.18",
+    # Configuration
+    "python-dotenv>=1.0",
+    "pydantic-settings>=2.7",
+    # Database
+    "aiosqlite>=0.20",
+    # Speech-to-Text
+    "faster-whisper>=1.1.0",
+    # Text-to-Speech
+    "piper-tts>=1.2.0",
+    # LLM / Agent Framework
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-text-splitters>=0.3.0",
+    "langchain-ollama>=0.3.0",
+    "langchain-chroma>=0.2.0",
+    "langgraph>=0.4.0",
+    "langsmith>=0.2.0",
+    # Vector Store
+    "chromadb>=0.5.0",
+    # Utilities
+    "qrcode[pil]>=8.0",
+    "Pillow>=11.0",
+    # SSL cert generation fallback
+    "cryptography>=44.0",
+    "nvidia-cublas-cu12>=12.9.2.10",
+    "nvidia-cudnn-cu12>=9.24.0.43",
+    "duckduckgo-search>=8.1.1",
+    "ddgs>=9.15.0",
+    "tavily-python>=0.7.27",
+]
+
+[project.scripts]
+ollie = "ollie:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"

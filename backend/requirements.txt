@@ -1,0 +1,36 @@
+# Ollie — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Web Framework ────────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+websockets>=14.0
+python-multipart>=0.0.18
+
+# ── Configuration ────────────────────────────────────────────
+python-dotenv>=1.0
+pydantic-settings>=2.7
+
+# ── Database ─────────────────────────────────────────────────
+aiosqlite>=0.20
+
+# ── Speech-to-Text ───────────────────────────────────────────
+faster-whisper>=1.1.0
+
+# ── Text-to-Speech ───────────────────────────────────────────
+piper-tts>=1.2.0
+
+# ── LLM / Agent Framework ───────────────────────────────────
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-ollama>=0.3.0
+langchain-chroma>=0.2.0
+langgraph>=0.4.0
+langsmith>=0.2.0
+
+# ── Vector Store ─────────────────────────────────────────────
+chromadb>=0.5.0
+
+# ── Utilities ────────────────────────────────────────────────
+qrcode[pil]>=8.0
+Pillow>=11.0
