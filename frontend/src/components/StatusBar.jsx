@@ -3,7 +3,7 @@
  * Clean, seamless single-pill design without nested borders or mismatched shapes.
  */
 
-import { Zap, MessageSquare, Mic, StickyNote, Volume2, VolumeX, ChevronDown } from 'lucide-react';
+import { Zap, MessageSquare, Mic, StickyNote, Volume2, VolumeX, ChevronDown, Sun, Moon } from 'lucide-react';
 
 export default function StatusBar({
   connectionStatus,
@@ -16,6 +16,8 @@ export default function StatusBar({
   onOpenModelSelector,
   viewMode = 'home',
   onToggleViewMode,
+  theme = 'dark',
+  onToggleTheme,
 }) {
   const isOnline = connectionStatus === 'connected';
 
@@ -80,6 +82,21 @@ export default function StatusBar({
               </span>
             )}
           </button>
+
+          {/* Dark / Light Theme Toggle */}
+          {onToggleTheme && (
+            <button
+              onClick={onToggleTheme}
+              className="header-action-btn"
+              title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-transform duration-300 hover:rotate-45" />
+              ) : (
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 transition-transform duration-300 hover:-rotate-12" />
+              )}
+            </button>
+          )}
 
           {/* Speech Audio Mute Toggle */}
           <button

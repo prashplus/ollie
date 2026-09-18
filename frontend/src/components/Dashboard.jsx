@@ -32,6 +32,18 @@ export default function Dashboard() {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [viewMode, setViewMode] = useState('home'); // 'home' (voice kiosk) or 'chat' (log feed)
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('ollie-theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('ollie-theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  }, []);
 
   const inputRef = useRef(null);
   const pendingImageRef = useRef(null);
@@ -325,6 +337,8 @@ export default function Dashboard() {
         onOpenModelSelector={() => setIsModelSelectorOpen(true)}
         viewMode={viewMode}
         onToggleViewMode={() => setViewMode(prev => prev === 'home' ? 'chat' : 'home')}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
       />
 
       {/* Main View Area: Voice Home vs Chat Log Feed */}
