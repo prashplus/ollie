@@ -309,7 +309,7 @@ export default function Dashboard() {
   const latestUserMsg = messages.filter(m => m.role === 'user').slice(-1)[0]?.content || '';
 
   return (
-    <div className="h-full flex flex-col gradient-mesh overflow-hidden">
+    <div className="h-full h-[100dvh] max-h-[100dvh] flex flex-col gradient-mesh overflow-hidden relative">
       {/* Top Header Bar */}
       <StatusBar
         connectionStatus={connectionStatus}
@@ -356,17 +356,17 @@ export default function Dashboard() {
           />
 
           {/* Bottom Action Bar Dock */}
-          <div className="safe-bottom px-4 sm:px-8 pb-3 pt-1 z-10 space-y-2">
+          <div className="safe-bottom px-4 sm:px-6 pb-[max(16px,env(safe-area-inset-bottom))] pt-1 z-10 space-y-2.5 kiosk-width-constraint min-w-0">
             {/* Quick Action Chips */}
             {messages.length > 0 && (
-              <div className="flex items-center justify-center gap-2 overflow-x-auto no-scrollbar py-0.5 px-1 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-2 overflow-x-auto no-scrollbar py-0.5 px-1 w-full">
                 {quickActions.map((qa) => {
                   const Icon = qa.icon;
                   return (
                     <button
                       key={qa.label}
                       onClick={() => sendQuery(qa.query)}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-white/20 hover:bg-blue-600/30 hover:border-blue-400/60 text-slate-100 text-xs font-semibold backdrop-blur-md shadow-md transition-all active:scale-95 flex-shrink-0"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-surface hover:bg-blue-600/30 hover:border-blue-400/50 text-slate-100 text-xs font-semibold shadow-md transition-all active:scale-95 flex-shrink-0"
                     >
                       <Icon className="w-3.5 h-3.5 text-blue-400" />
                       <span>{qa.label}</span>
@@ -377,8 +377,8 @@ export default function Dashboard() {
             )}
 
             {/* Floating Input Dock */}
-            <div className="bg-slate-900/90 backdrop-blur-2xl border border-white/15 p-2 rounded-3xl shadow-2xl max-w-2xl mx-auto">
-              <div className="flex items-center gap-2">
+            <div className="glass-surface-elevated p-2 rounded-3xl shadow-2xl w-full min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
                 {/* Camera Capture Action */}
                 <CameraPreview
                   videoRef={videoRef}
@@ -392,7 +392,7 @@ export default function Dashboard() {
                 />
 
                 {/* Expandable Text Input */}
-                <div className="flex-1 relative flex items-center">
+                <div className="flex-1 relative flex items-center min-w-0">
                   <input
                     ref={inputRef}
                     type="text"
@@ -400,18 +400,18 @@ export default function Dashboard() {
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={isRecording ? 'Listening to voice...' : isProcessing ? 'Ollie is thinking...' : 'Ask Ollie anything...'}
-                    className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.07] border border-white/10 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500/60 focus:bg-white/[0.12] transition-all"
+                    className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.05] border border-white/[0.09] text-sm sm:text-base text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500/60 focus:bg-white/[0.09] transition-all"
                   />
                 </div>
 
-                {/* Smart Action Button */}
+                {/* Smart Action Button (48px Touch Target) */}
                 {inputText.trim().length > 0 ? (
                   <button
                     onClick={handleSendText}
-                    className="w-10 h-10 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 active:scale-95 transition-all flex-shrink-0"
+                    className="w-12 h-12 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 active:scale-95 transition-all flex-shrink-0"
                     title="Send Message"
                   >
-                    <Send className="w-4 h-4 text-white" />
+                    <Send className="w-5 h-5 text-white" />
                   </button>
                 ) : (
                   <VoiceButton

@@ -1,10 +1,11 @@
 /**
- * VoiceHome — Immersive, clean voice-first kiosk home screen.
- * Centered layout with generous margins away from phone curved corners,
- * large glowing Voice Orb, clear word-wrapped captions, and prominent touch action cards.
+ * VoiceHome — Universal Voice Kiosk for all screens & orientations.
+ *
+ * Scales fluidly from small phones (360px) to iPads, desktop monitors,
+ * and horizontal/landscape viewports.
  */
 
-import { Mic, Square, Loader2, Newspaper, CloudSun, StickyNote, Activity, Sparkles } from 'lucide-react';
+import { Mic, Square, Loader2, Newspaper, CloudSun, StickyNote, Clock, Activity, Sparkles } from 'lucide-react';
 
 export default function VoiceHome({
   isRecording,
@@ -19,7 +20,6 @@ export default function VoiceHome({
   onStopRecording,
   onCancelProcessing,
   onQuickPrompt,
-  onSwitchToChat,
 }) {
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60);
@@ -40,75 +40,90 @@ export default function VoiceHome({
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-3 sm:py-5 text-center select-none overflow-hidden max-w-md mx-auto w-full">
-      {/* Upper Area: Glowing Voice Orb */}
-      <div className="flex-1 flex flex-col items-center justify-center my-auto w-full">
-        {/* Voice Orb Button Container */}
-        <div className="relative mb-6">
+    <div className="responsive-shell kiosk-width-constraint px-4 sm:px-6 py-2 sm:py-4 select-none min-h-0">
+      {/* ── Central Stage: Orb + Response Card ── */}
+      <div className="kiosk-stage-area flex-1 flex flex-col items-center justify-center w-full min-h-0 gap-4 sm:gap-6 my-auto py-1">
+        {/* Living AI Voice Orb */}
+        <div className="relative flex items-center justify-center flex-shrink-0">
           {/* Ambient Glow Aura */}
           <div
-            className={`absolute inset-0 rounded-full blur-2xl transition-all duration-500 ${
+            className={`absolute -inset-6 rounded-full blur-3xl transition-all duration-700 pointer-events-none ${
               isRecording
-                ? 'bg-red-500/50 scale-135 animate-pulse'
+                ? 'bg-rose-500/45 scale-125 animate-pulse'
                 : isProcessing
-                  ? 'bg-amber-500/40 scale-120 animate-spin'
+                  ? 'bg-amber-500/35 scale-115 animate-celestial'
                   : isPlayingAudio
-                    ? 'bg-emerald-500/50 scale-135 animate-pulse'
-                    : 'bg-blue-500/30 scale-110'
+                    ? 'bg-emerald-500/40 scale-125 animate-pulse'
+                    : 'bg-blue-600/30 scale-105 animate-organic-pulse'
             }`}
           />
 
-          {/* Central Interactive Voice Orb Button */}
+          {/* Rotating Ring when Thinking or Recording */}
+          {(isProcessing || isRecording) && (
+            <div
+              className={`absolute -inset-3 rounded-full border-2 border-dashed pointer-events-none ${
+                isRecording
+                  ? 'border-rose-400/60 animate-spin'
+                  : 'border-amber-400/50 animate-celestial'
+              }`}
+              style={{ animationDuration: isRecording ? '4s' : '8s' }}
+            />
+          )}
+
+          {/* Fluid Responsive Core Button */}
           <button
             onClick={handleOrbClick}
-            className={`relative w-40 h-40 sm:w-48 sm:h-48 rounded-full flex flex-col items-center justify-center border-4 transition-all duration-300 shadow-2xl active:scale-95 ${
+            className={`responsive-voice-orb z-10 ${
               isRecording
-                ? 'bg-gradient-to-br from-red-600 via-rose-600 to-red-800 border-red-300 shadow-red-600/60 scale-105'
+                ? 'bg-gradient-to-br from-rose-600 via-red-600 to-rose-900 border-rose-300 shadow-rose-600/50 scale-105'
                 : isProcessing
-                  ? 'bg-gradient-to-br from-slate-900 via-amber-950/40 to-slate-900 border-amber-400 shadow-amber-500/30'
+                  ? 'bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-900 border-amber-400/70 shadow-amber-500/30'
                   : isPlayingAudio
-                    ? 'bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 border-emerald-300 shadow-emerald-600/50'
-                    : 'bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 border-blue-300/60 shadow-blue-600/50 hover:scale-105'
+                    ? 'bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 border-emerald-300 shadow-emerald-600/50'
+                    : 'bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-800 border-white/25 shadow-blue-600/40 hover:scale-105 hover:border-white/40'
             }`}
             title={
               isRecording
-                ? 'Tap to Stop & Send'
+                ? 'Tap to send voice'
                 : isProcessing
-                  ? 'Processing... Tap to Cancel'
-                  : 'Tap to Speak'
+                  ? 'Thinking... Tap to cancel'
+                  : 'Tap to speak'
             }
           >
             {isProcessing ? (
-              <div className="flex flex-col items-center gap-2 px-2">
-                <Loader2 className="w-12 h-12 text-amber-300 animate-spin" />
-                <span className="text-xs font-black text-amber-200 uppercase tracking-wider">
-                  Thinking...
+              <div className="flex flex-col items-center gap-1.5 px-3">
+                <div className="relative flex items-center justify-center">
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-amber-400/30 border-t-amber-300 animate-spin" />
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 absolute" />
+                </div>
+                <span className="text-xs sm:text-sm font-black text-amber-200 tracking-wider uppercase">
+                  Thinking
                 </span>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-slate-300 font-medium">
                   Tap to cancel
                 </span>
               </div>
             ) : isRecording ? (
-              <div className="flex flex-col items-center gap-1.5 px-2">
-                <Square className="w-8 h-8 text-white fill-white animate-pulse" />
-                <span className="text-base font-black text-white font-mono">
+              <div className="flex flex-col items-center gap-1 px-3">
+                <Square className="w-7 h-7 sm:w-9 sm:h-9 text-white fill-white animate-pulse" />
+                <span className="text-sm sm:text-base font-black text-white font-mono tracking-wider">
                   {formatTime(recordingDuration)}
                 </span>
-                <span className="text-[10px] font-bold text-red-100 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-rose-100 uppercase tracking-wider">
                   Tap to Send
                 </span>
               </div>
             ) : isPlayingAudio ? (
-              <div className="flex flex-col items-center gap-2 px-2">
-                <Activity className="w-12 h-12 text-white animate-pulse" />
-                <span className="text-xs font-black text-white uppercase tracking-wider">
+              <div className="flex flex-col items-center gap-1.5 px-3">
+                <Activity className="w-9 h-9 sm:w-11 sm:h-11 text-emerald-200 animate-pulse" />
+                <span className="text-xs sm:text-sm font-black text-white uppercase tracking-wider">
                   Speaking...
                 </span>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-2 px-2">
-                <Mic className="w-14 h-14 text-white" />
-                <span className="text-xs font-black text-white uppercase tracking-wider">
+              <div className="flex flex-col items-center gap-1.5 px-3">
+                <Mic className="w-11 h-11 sm:w-14 sm:h-14 text-white drop-shadow-md" />
+                <span className="text-xs sm:text-sm font-black text-white uppercase tracking-widest drop-shadow">
                   Tap to Talk
                 </span>
               </div>
@@ -116,30 +131,37 @@ export default function VoiceHome({
           </button>
         </div>
 
-        {/* Real-time waveform bar when recording */}
+        {/* Soundwave bars during voice input */}
         {isRecording && (
-          <div className="flex items-center gap-1 h-6 px-4 py-1 bg-slate-900/90 rounded-full border border-red-500/40 mb-4 animate-fade-in shadow-lg">
-            {waveformData.slice(0, 24).map((val, i) => (
+          <div className="flex items-center justify-center gap-1 h-7 px-4 py-1 rounded-full bg-slate-900/90 border border-rose-500/40 shadow-lg flex-shrink-0">
+            {waveformData.slice(0, 20).map((val, i) => (
               <div
                 key={i}
-                className="w-1 bg-gradient-to-t from-red-500 to-rose-400 rounded-full transition-all duration-75"
+                className="w-1 bg-gradient-to-t from-rose-500 to-orange-400 rounded-full transition-all duration-75"
                 style={{ height: `${Math.max(4, val * 22)}px` }}
               />
             ))}
           </div>
         )}
 
-        {/* Spoken Response & Captions Box (Safe word-wrap, zero overflow) */}
-        <div className="w-full bg-slate-900/95 backdrop-blur-2xl border border-white/20 rounded-3xl p-4 sm:p-5 shadow-2xl text-left overflow-hidden">
+        {/* Response & Captions Box */}
+        <div className="response-card-surface flex-shrink min-h-[90px] w-full">
+          {/* User Prompt Tag */}
           {latestUserPrompt && (
-            <p className="text-xs font-bold text-blue-400 mb-1.5 truncate">
-              You: <span className="text-slate-200 font-medium">{latestUserPrompt}</span>
-            </p>
+            <div className="flex items-center gap-2 mb-2 min-w-0">
+              <span className="px-2 py-0.5 rounded-md bg-blue-500/20 border border-blue-400/30 text-[10px] sm:text-xs font-black text-blue-300 uppercase tracking-wide flex-shrink-0">
+                You
+              </span>
+              <p className="text-xs sm:text-sm text-slate-200 font-semibold truncate min-w-0 flex-1">
+                {latestUserPrompt}
+              </p>
+            </div>
           )}
 
-          <div className="text-sm sm:text-base text-slate-100 leading-relaxed font-medium max-h-32 overflow-y-auto pr-1 break-words">
+          {/* Assistant Response Output */}
+          <div className="text-xs sm:text-sm md:text-base text-slate-100 leading-relaxed font-medium max-h-28 sm:max-h-36 md:max-h-48 overflow-y-auto pr-1 break-words [overflow-wrap:anywhere]">
             {processingStatus ? (
-              <div className="flex items-center gap-2 text-blue-300 font-bold animate-pulse">
+              <div className="flex items-center gap-2 text-blue-300 font-semibold py-1">
                 <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
                 <span>{processingStatus}</span>
               </div>
@@ -147,41 +169,53 @@ export default function VoiceHome({
               <p className="whitespace-pre-wrap">{latestResponse}</p>
             ) : (
               <p className="text-slate-400 italic">
-                "Hello! Tap the orb above to talk, or select a quick topic below."
+                "Hello! Tap the orb to talk, or select a topic below."
               </p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Bottom Area: Big Touch Action Buttons with safe-area bottom margin */}
-      <div className="w-full pt-3 pb-5 sm:pb-3">
-        <div className="grid grid-cols-3 gap-2.5">
+      {/* ── Pinned Bottom Action Deck (Strictly 1 Row, 3 Cards) ── */}
+      <div className="w-full pt-2 pb-[max(12px,env(safe-area-inset-bottom))] flex-shrink-0">
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-4">
+          {/* Action 1: Top News */}
           <button
             onClick={() => onQuickPrompt?.('Tell me the top breaking news headlines right now.')}
             disabled={isProcessing}
-            className="flex flex-col items-center justify-center min-h-[68px] p-3 rounded-2xl bg-slate-800/95 border border-white/20 hover:bg-blue-600/30 hover:border-blue-400 text-white font-bold text-xs shadow-lg transition-all active:scale-95 disabled:opacity-50"
+            className="bottom-action-card hover:bg-blue-600/20 hover:border-blue-400/40 text-white transition-all disabled:opacity-40 group"
           >
-            <Newspaper className="w-5 h-5 text-blue-400 mb-1" />
-            <span className="leading-tight">Top News</span>
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+              <Newspaper className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold">Top News</span>
+            <span className="text-[10px] text-slate-400 hidden md:inline">Headlines</span>
           </button>
 
+          {/* Action 2: Weather */}
           <button
             onClick={() => onQuickPrompt?.('What is the weather today in Bengaluru?')}
             disabled={isProcessing}
-            className="flex flex-col items-center justify-center min-h-[68px] p-3 rounded-2xl bg-slate-800/95 border border-white/20 hover:bg-amber-600/30 hover:border-amber-400 text-white font-bold text-xs shadow-lg transition-all active:scale-95 disabled:opacity-50"
+            className="bottom-action-card hover:bg-amber-600/20 hover:border-amber-400/40 text-white transition-all disabled:opacity-40 group"
           >
-            <CloudSun className="w-5 h-5 text-amber-400 mb-1" />
-            <span className="leading-tight">Weather</span>
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+              <CloudSun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold">Weather</span>
+            <span className="text-[10px] text-slate-400 hidden md:inline">Forecast</span>
           </button>
 
+          {/* Action 3: Notes */}
           <button
             onClick={() => onQuickPrompt?.('What are my current family notes?')}
             disabled={isProcessing}
-            className="flex flex-col items-center justify-center min-h-[68px] p-3 rounded-2xl bg-slate-800/95 border border-white/20 hover:bg-emerald-600/30 hover:border-emerald-400 text-white font-bold text-xs shadow-lg transition-all active:scale-95 disabled:opacity-50"
+            className="bottom-action-card hover:bg-emerald-600/20 hover:border-emerald-400/40 text-white transition-all disabled:opacity-40 group"
           >
-            <StickyNote className="w-5 h-5 text-emerald-400 mb-1" />
-            <span className="leading-tight">Notes</span>
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+              <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold">Notes</span>
+            <span className="text-[10px] text-slate-400 hidden md:inline">Family Board</span>
           </button>
         </div>
       </div>

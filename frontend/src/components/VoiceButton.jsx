@@ -122,7 +122,7 @@ export default function VoiceButton({
         onPointerUp={handlePointerUp}
         className={`
           flex items-center justify-center transition-all duration-200 select-none touch-none
-          ${compact ? 'w-10 h-10 rounded-2xl' : 'w-11 h-11 rounded-2xl'}
+          w-12 h-12 rounded-2xl flex-shrink-0
           ${isRecording
             ? 'bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/40 scale-105 animate-pulse'
             : isProcessing

@@ -62,7 +62,7 @@ export default function ChatFeed({ messages, onSuggestionClick }) {
   }
 
   return (
-    <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-8 py-4 space-y-4 max-w-3xl mx-auto w-full">
+    <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4 kiosk-width-constraint">
       {messages.map((msg, i) => (
         <MessageBubble key={i} message={msg} index={i} />
       ))}

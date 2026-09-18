@@ -22,7 +22,7 @@ export default function CameraPreview({
           onClick={onStartCamera}
           disabled={permissionGranted === false}
           className={`
-            w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 border
+            w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 border flex-shrink-0
             ${permissionGranted === false
               ? 'bg-slate-800/50 border-white/5 text-slate-600 cursor-not-allowed'
               : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white active:scale-95'
@@ -30,14 +30,14 @@ export default function CameraPreview({
           `}
           title={permissionGranted === false ? 'Camera access denied' : 'Open Camera for Vision'}
         >
-          <Camera className="w-5 h-5" />
+          <Camera className="w-5.5 h-5.5" />
         </button>
       )}
 
       {/* Captured Image Preview thumbnail */}
       {capturedImage && !isCameraActive && (
-        <div className="relative">
-          <div className="w-10 h-10 rounded-xl overflow-hidden border-2 border-blue-500 shadow-md">
+        <div className="relative flex-shrink-0">
+          <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-blue-500 shadow-md">
             <img src={capturedImage} alt="Captured preview" className="w-full h-full object-cover" />
           </div>
           <button
@@ -45,7 +45,7 @@ export default function CameraPreview({
             className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow hover:bg-red-600 transition-colors"
             title="Remove Photo"
           >
-            <X className="w-3 h-3" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
@@ -56,7 +56,7 @@ export default function CameraPreview({
           {/* Active Camera toggle button */}
           <button
             onClick={onStopCamera}
-            className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 text-blue-400 flex items-center justify-center relative shadow-md"
+            className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/40 text-blue-400 flex items-center justify-center relative shadow-md flex-shrink-0"
             title="Close camera"
           >
             <Camera className="w-5 h-5" />

@@ -233,8 +233,13 @@ async def synthesize_speech(text: str) -> bytes | None:
         try:
             # Synthesize to an in-memory WAV buffer
             wav_buffer = io.BytesIO()
+            sample_rate = getattr(voice.config, "sample_rate", 22050)
             with wave.open(wav_buffer, "wb") as wav_file:
-                voice.synthesize(text, wav_file)
+                wav_file.setnchannels(1)
+                wav_file.setsampwidth(2)
+                wav_file.setframerate(sample_rate)
+                for chunk in voice.synthesize(text):
+                    wav_file.writeframes(chunk.audio_int16_bytes)
 
             wav_bytes = wav_buffer.getvalue()
             logger.info("Synthesized %d chars → %d bytes WAV", len(text), len(wav_bytes))
