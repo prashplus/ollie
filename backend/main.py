@@ -22,7 +22,7 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -395,10 +395,33 @@ async def list_notes(category: str | None = None):
 
 
 @app.post("/api/notes")
-async def create_note(content: str, author: str = "Family", category: str = "general"):
-    """Create a new family note via REST."""
-    note_id = db.add_note(content, author, category)
+async def create_note(request: Request):
+    """Create a new family note via REST (JSON or query)."""
+    content = ""
+    author = "Family"
+    category = "general"
+    try:
+        body = await request.json()
+        content = body.get("content", "")
+        author = body.get("author", "Family")
+        category = body.get("category", "general")
+    except Exception:
+        content = request.query_params.get("content", "")
+        author = request.query_params.get("author", "Family")
+        category = request.query_params.get("category", "general")
+
+    if not content or not content.strip():
+        return JSONResponse({"error": "Content cannot be empty"}, status_code=400)
+
+    note_id = db.add_note(content.strip(), author, category)
     return JSONResponse({"id": note_id, "status": "created"})
+
+
+@app.delete("/api/notes/{note_id}")
+async def remove_note(note_id: int):
+    """Delete a family note."""
+    success = db.delete_note(note_id)
+    return JSONResponse({"status": "deleted" if success else "not_found"})
 
 
 @app.get("/api/models")
